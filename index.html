@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Independent construction skills registration prototype. Registration does not guarantee employment." />
+  <title>Construction Workforce Registration</title>
+  <style>
+    :root{--navy:#10263f;--blue:#1c5d8c;--gold:#f2b544;--bg:#f4f7fa;--ink:#172334;--muted:#5c6b7b;--line:#dce4eb;--white:#fff;--green:#28794e}
+    *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+    header{background:linear-gradient(120deg,var(--navy),#1c4b70);color:white;padding:24px 16px 34px}
+    .wrap{max-width:980px;margin:auto} .brand{font-size:13px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#c8d8e8}
+    header h1{margin:8px 0 10px;font-size:clamp(28px,5vw,42px);line-height:1.12} header p{max-width:720px;color:#e3edf5;margin:0}
+    .notice{margin:18px auto 0;padding:12px 14px;border-radius:12px;background:#fff3d7;color:#664b12;border:1px solid #f1d58e;font-size:14px}
+    main{padding:22px 16px 50px} .card{background:white;border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:18px;box-shadow:0 4px 18px rgba(16,38,63,.04)}
+    h2{margin:0 0 8px;font-size:22px} .sub{color:var(--muted);margin:0 0 16px;font-size:14px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .rank{border:1px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;background:#fff;transition:.15s}
+    .rank:hover{border-color:var(--blue);transform:translateY(-1px)} .rank.selected{border:2px solid var(--blue);background:#eef6fc}
+    .rank strong{display:block;margin-bottom:3px} .fee{font-weight:800;color:var(--blue)} .rank small{color:var(--muted);display:block;margin-top:5px}
+    label{display:block;font-size:14px;font-weight:650;margin-bottom:6px} input,select,textarea{width:100%;border:1px solid #cbd6df;border-radius:9px;padding:11px 12px;font:inherit;background:white;color:var(--ink)}
+    input[type=file]{padding:9px} input[type=checkbox]{width:auto} .fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px} .field{margin-bottom:14px} .wide{grid-column:1/-1}
+    .hint{font-size:12px;color:var(--muted);margin-top:5px} .pill{display:inline-block;background:#edf3f8;border-radius:100px;padding:4px 10px;font-size:12px;color:#31516b;font-weight:700}
+    .btn{border:0;border-radius:10px;padding:12px 18px;font-weight:800;cursor:pointer;font:inherit} .primary{background:var(--blue);color:white} .secondary{background:#eaf0f5;color:var(--navy)} .btn:disabled{opacity:.45;cursor:not-allowed}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end} .hidden{display:none!important} .checkline{display:flex;gap:9px;align-items:flex-start;font-size:14px;margin:12px 0}
+    .summary{background:#f5f8fb;border:1px solid var(--line);border-radius:12px;padding:14px} .summary p{margin:6px 0} .alert{border-left:4px solid var(--gold);padding:10px 12px;background:#fff8e8;font-size:14px;margin:12px 0}
+    .success{border-left-color:var(--green);background:#eef8f1;color:#205c3d} footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
+    @media(max-width:560px){.card{padding:16px}.actions .btn{width:100%}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand">Independent skills registration portal</div>
+    <h1>Construction Workforce Registration</h1>
+    <p>Register your trade, skills, qualifications, and experience for consideration for construction-related opportunities. All applicants are welcome to submit a profile.</p>
+    <div class="notice"><strong>Important:</strong> This is an independent registration prototype, not an official refinery, project, contractor, or government recruitment portal. No employment or shortlisting is guaranteed. Do not pay a recruitment fee unless you have independently verified that it is lawful and authorized.</div>
+  </div>
+</header>
+<main class="wrap">
+  <section class="card" id="categoryCard">
+    <h2>1. Choose your worker category</h2><p class="sub">Select a category to view the suggested requirements and draft fee tier.</p>
+    <div class="grid" id="rankGrid"></div>
+    <div id="categoryInfo" class="alert hidden"></div>
+  </section>
+
+  <form id="registrationForm">
+    <section class="card">
+      <h2>2. Personal details</h2><p class="sub">Fields marked * are required.</p>
+      <div class="fields">
+        <div class="field"><label for="fullName">Full name *</label><input id="fullName" name="fullName" autocomplete="name" required /></div>
+        <div class="field"><label for="phone">Phone number *</label><input id="phone" name="phone" type="tel" placeholder="07xx xxx xxx" autocomplete="tel" required /></div>
+        <div class="field"><label for="email">Email (optional)</label><input id="email" name="email" type="email" autocomplete="email" /></div>
+        <div class="field"><label for="county">County *</label><input id="county" name="county" required /></div>
+        <div class="field"><label for="town">Town / area</label><input id="town" name="town" /></div>
+        <div class="field"><label for="ageConfirm">Age confirmation *</label><select id="ageConfirm" name="ageConfirm" required><option value="">Choose…</option><option value="18plus">I am 18 years or older</option><option value="under18">I am under 18</option></select></div>
+      </div>
+    </section>
+    <section class="card">
+      <h2>3. Trade and experience</h2>
+      <div class="fields">
+        <div class="field"><label for="occupation">Occupation / trade *</label><select id="occupation" name="occupation" required><option value="">Select category first…</option></select></div>
+        <div class="field"><label for="experience">Relevant experience *</label><select id="experience" name="experience" required><option value="">Choose…</option><option>No experience yet</option><option>Under 1 year</option><option>1–2 years</option><option>3–5 years</option><option>6–10 years</option><option>More than 10 years</option></select></div>
+        <div class="field"><label for="education">Highest education / training</label><select id="education" name="education"><option value="">Choose…</option><option>No formal qualification</option><option>Primary</option><option>Secondary</option><option>Trade test / craft certificate</option><option>Certificate</option><option>Diploma</option><option>Degree</option><option>Postgraduate</option><option>Other</option></select></div>
+        <div class="field"><label for="previousWork">Previous employer / project</label><input id="previousWork" name="previousWork" placeholder="Company or project, if any" /></div>
+        <div class="field wide"><label for="skills">Describe your skills and work experience *</label><textarea id="skills" name="skills" rows="4" placeholder="Describe the work you can do, tools/equipment used, and projects you have worked on…" required></textarea></div>
+      </div>
+    </section>
+    <section class="card">
+      <h2>4. Upload supporting documents</h2><p class="sub" id="uploadGuidance">CV and certificates are optional for general labour applicants, but may help employers assess your profile.</p>
+      <div class="fields">
+        <div class="field"><label for="cv">CV (PDF, DOC, DOCX)</label><input id="cv" name="cv" type="file" accept=".pdf,.doc,.docx" /><div class="hint">Prototype only: files are not uploaded to a server.</div></div>
+        <div class="field"><label for="certs">Certificates / licences (PDF or images)</label><input id="certs" name="certs" type="file" accept=".pdf,.jpg,.jpeg,.png" multiple /><div class="hint">Only upload relevant documents. Do not upload sensitive documents unless the portal operator has explained how they will be protected.</div></div>
+        <div class="field"><label for="reference">Reference contact (optional)</label><input id="reference" name="reference" placeholder="Name and contact, if you have permission to share" /></div>
+      </div>
+    </section>
+    <section class="card">
+      <h2>5. Review before submitting</h2><p class="sub">The category, requirements, and fee tier you chose will be shown here.</p>
+      <div id="reviewSummary" class="summary"><p>Please select a category and complete the form to preview your registration.</p></div>
+      <div class="alert"><strong>Payment notice:</strong> Applicant registration fees can be unlawful or require licensing/authorization depending on the recruitment service. Payment collection is intentionally disabled in this prototype until the operator confirms lawful authority and any required approvals. The M-Pesa number supplied by the operator is not activated here.</div>
+      <label class="checkline"><input id="truthCheck" type="checkbox" required /> <span>I confirm the information I provided is accurate to the best of my knowledge, and I understand that registration does not guarantee employment.</span></label>
+      <label class="checkline"><input id="privacyCheck" type="checkbox" required /> <span>I have read the privacy notice and understand how my information may be used for this independent registration service. (A complete privacy notice and secure data-handling system must be provided before live launch.)</span></label>
+      <div class="actions"><button type="button" class="btn secondary" id="reviewBtn">Review my application</button><button type="submit" class="btn primary" id="submitBtn" disabled>Submit registration (demo)</button></div>
+      <div id="result" class="alert success hidden" role="status"></div>
+    </section>
+  </form>
+</main>
+<footer>Independent prototype • Demo form only — submissions and files are not saved or transmitted.</footer>
+<script>
+const ranks = [
+ {id:1,title:'Professionals & Engineers',fee:1000,desc:'Degree or relevant professional qualifications, CV, certificates, experience, and references as applicable.',jobs:['Civil Engineer','Structural Engineer','Mechanical Engineer','Electrical Engineer','Architect','Quantity Surveyor','Project Engineer','Construction Manager','Environmental Engineer']},
+ {id:2,title:'Project Specialists & Managers',fee:800,desc:'Relevant qualification, CV, specialist credentials where required, and documented experience.',jobs:['Project Manager','Site Supervisor','Health & Safety Officer','Quality Control Officer','Surveyor','Project Planner','Environmental Officer','Logistics Coordinator','Procurement Officer']},
+ {id:3,title:'Technicians',fee:600,desc:'Relevant technical training or diploma, experience, and trade documents where applicable.',jobs:['Electrical Technician','Mechanical Technician','Civil Technician','Laboratory Technician','Welding Inspector','Survey Assistant','IT Technician']},
+ {id:4,title:'Certified / Skilled Trades',fee:500,desc:'Trade certificate or demonstrated experience; licence/certification required for regulated or safety-critical tasks.',jobs:['Electrician','Welder','Plumber','Carpenter','Mason','Pipe Fitter','Steel Fixer','Scaffolder','HVAC Technician','Heavy Machinery Operator']},
+ {id:5,title:'Experienced Construction Workers',fee:300,desc:'Practical experience and skills; previous projects or references may be useful.',jobs:['Concrete Worker','Roofing Worker','Tiling Worker','Painter','Excavation Worker','Road Construction Worker','Finishing Worker','Experienced Construction Helper']},
+ {id:6,title:'Semi-Skilled Workers',fee:100,desc:'Some practical skills or experience preferred. Formal certificates are optional unless the job requires them.',jobs:['Assistant Mason','Assistant Carpenter','Assistant Welder','Site Assistant','Material Handler','Construction Helper']},
+ {id:7,title:'General Labour',fee:0,desc:'Open to applicants without formal certificates or CV. Work-specific safety and suitability requirements still apply.',jobs:['General Labourer','Loading / Unloading Worker','Site Cleaner','Manual Worker','General Helper','Labour Support']}
+];
+let selected = null;
+const rankGrid=document.getElementById('rankGrid'), info=document.getElementById('categoryInfo'), occupation=document.getElementById('occupation'), summary=document.getElementById('reviewSummary'), reviewBtn=document.getElementById('reviewBtn'), submitBtn=document.getElementById('submitBtn'), result=document.getElementById('result');
+ranks.forEach(r=>{const el=document.createElement('button');el.type='button';el.className='rank';el.innerHTML=`<strong>Rank ${r.id}: ${r.title}</strong><span class="fee">Suggested tier: ${r.fee===0?'Free':'KSh '+r.fee.toLocaleString()}</span><small>Tap to select</small>`;el.addEventListener('click',()=>selectRank(r,el));rankGrid.appendChild(el)});
+function selectRank(r,el){selected=r;document.querySelectorAll('.rank').forEach(x=>x.classList.remove('selected'));el.classList.add('selected');info.classList.remove('hidden');info.innerHTML=`<strong>${r.title}</strong><br>${r.desc}<br><strong>Suggested occupations:</strong> ${r.jobs.join(', ')}<br><strong>Proposed tier:</strong> ${r.fee===0?'Free':'KSh '+r.fee.toLocaleString()}<br><em>Fees shown are draft proposals and are not currently payable.</em>`;occupation.innerHTML='<option value="">Choose an occupation…</option>'+r.jobs.map(j=>`<option>${j}</option>`).join('');updateSummary();}
+function updateSummary(){if(!selected){summary.innerHTML='<p>Please select a category to preview your registration.</p>';return}summary.innerHTML=`<p><strong>Category:</strong> Rank ${selected.id} — ${selected.title}</p><p><strong>Selected occupation:</strong> ${occupation.value||'Not selected'}</p><p><strong>Draft registration tier:</strong> ${selected.fee===0?'Free':'KSh '+selected.fee.toLocaleString()}</p><p><strong>Documents:</strong> ${document.getElementById('cv').files.length?'CV attached (local preview)':'No CV selected'}; ${document.getElementById('certs').files.length?'certificate(s) selected (local preview)':'no certificates selected'}</p><p><strong>Requirements:</strong> ${selected.desc}</p>`;}
+reviewBtn.addEventListener('click',()=>{updateSummary();summary.scrollIntoView({behavior:'smooth',block:'center'});});
+['occupation','cv','certs','fullName','phone','county','ageConfirm','experience','skills'].forEach(id=>document.getElementById(id).addEventListener('input',updateSummary));
+document.getElementById('registrationForm').addEventListener('change',updateSummary);
+function validate(){const age=document.getElementById('ageConfirm').value;if(age==='under18'){alert('This demo registration is for adults (18+) only.');return false}if(!selected){alert('Please select a worker category.');return false}if(!occupation.value){alert('Please select an occupation.');return false}if(!document.getElementById('truthCheck').checked||!document.getElementById('privacyCheck').checked){alert('Please tick both confirmation boxes before submitting.');return false}return true}
+document.getElementById('registrationForm').addEventListener('submit',e=>{e.preventDefault();if(!validate())return;const ref='CWR-'+new Date().getFullYear()+'-'+Math.random().toString(36).slice(2,8).toUpperCase();result.classList.remove('hidden');result.innerHTML=`<strong>Demo submission preview created.</strong><br>Reference: ${ref}<br>This form is not connected to a database, does not upload documents, does not send notifications, and does not process payments. Your details have not been saved or transmitted.`;result.scrollIntoView({behavior:'smooth',block:'center'});});
+</script>
+</body>
+</html>
